@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sw">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
         /* ============================================================
-               CSS CUSTOM PROPERTIES — Sawa na index.html
+               CSS CUSTOM PROPERTIES
                ============================================================ */
         :root {
             --black: #000000ff;
@@ -28,9 +28,6 @@
             --transition: all 0.3s ease;
         }
 
-        /* ============================================================
-               RESET & BASE
-               ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -64,9 +61,6 @@
             padding: 0 24px;
         }
 
-        /* ============================================================
-               BUTTONS
-               ============================================================ */
         .btn {
             display: inline-block;
             padding: 14px 38px;
@@ -111,19 +105,7 @@
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
         }
 
-        .btn-success {
-            background: #10b981;
-            color: var(--white);
-        }
-        .btn-success:hover {
-            background: #059669;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
-        }
-
-        /* ============================================================
-               NAVBAR (sawa kabisa na index)
-               ============================================================ */
+        /* NAVBAR */
         .navbar {
             background: var(--white);
             box-shadow: var(--shadow);
@@ -197,9 +179,26 @@
             color: var(--accent);
         }
 
-        .nav-links .btn {
+        /* Kitufe cha Email kwenye navbar */
+        .nav-links .btn-email {
+            background: var(--accent);
+            color: var(--black);
             padding: 10px 28px;
+            border-radius: 50px;
+            font-weight: 600;
             font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 18px rgba(252, 163, 17, 0.35);
+        }
+
+        .nav-links .btn-email:hover {
+            background: #e0950f;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(252, 163, 17, 0.5);
         }
 
         .hamburger {
@@ -209,9 +208,7 @@
             color: var(--text-dark);
         }
 
-        /* ============================================================
-               PAGE HEADER (kama hero ya index)
-               ============================================================ */
+        /* PAGE HEADER */
         .page-header {
             padding: 140px 0 60px;
             background: var(--oxford-blue);
@@ -257,9 +254,7 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
-        /* ============================================================
-               DONATE CONTENT
-               ============================================================ */
+        /* DONATE SECTION */
         .donate-section {
             padding: 80px 0;
         }
@@ -321,36 +316,115 @@
             color: var(--text-light);
         }
 
+        /* DONATE BOX */
         .donate-box {
             background: var(--white);
             padding: 40px 32px;
             border-radius: var(--radius);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
             border-top: 5px solid var(--accent);
+            text-align: center;
         }
 
-        .donate-box h3 {
-            font-size: 1.5rem;
+        .donate-box .donation-title {
+            font-size: 28px;
             font-weight: 700;
             color: var(--oxford-blue);
             margin-bottom: 4px;
+            letter-spacing: -0.5px;
         }
 
-        .donate-box h3 span {
+        .donate-box .donation-title span {
             color: var(--accent);
         }
 
-        .donate-box .subtitle {
+        .donate-box .donation-subtitle {
+            font-size: 18px;
             color: var(--text-light);
             margin-bottom: 24px;
-            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
         }
 
+        /* Frequency Buttons */
+        .frequency-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            background: #f1f4f8;
+            padding: 6px;
+            border-radius: 60px;
+            max-width: 360px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .freq-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 10px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #4a5b69;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .freq-btn.active {
+            background: var(--white);
+            color: var(--oxford-blue);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .freq-btn:hover:not(.active) {
+            background: #e6ecf3;
+        }
+
+        /* Period selector */
+        .period-group {
+            display: none;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .period-group.show {
+            display: flex;
+        }
+
+        .period-btn {
+            padding: 8px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 50px;
+            background: var(--white);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .period-btn:hover {
+            border-color: var(--accent);
+            background: #fef3c7;
+        }
+
+        .period-btn.active {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: var(--black);
+        }
+
+        /* Preset amounts */
         .donate-amounts {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             margin-bottom: 16px;
+            justify-content: center;
         }
 
         .donate-amounts .amount {
@@ -363,7 +437,8 @@
             background: var(--white);
             font-size: 0.9rem;
             color: var(--text-dark);
-            flex: 1 0 auto;
+            flex: 0 1 auto;
+            min-width: 72px;
         }
 
         .donate-amounts .amount:hover {
@@ -377,6 +452,7 @@
             color: var(--black);
         }
 
+        /* Other input */
         .donate-box .input-group {
             display: flex;
             align-items: center;
@@ -386,6 +462,9 @@
             margin-bottom: 16px;
             background: var(--white);
             transition: var(--transition);
+            max-width: 280px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .donate-box .input-group:focus-within {
@@ -425,10 +504,86 @@
             -moz-appearance: textfield;
         }
 
+        /* Designation Dropdown */
+        .designation-group {
+            margin-bottom: 16px;
+            text-align: left;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .designation-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 6px;
+            text-align: left;
+        }
+
+        .designation-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 50px;
+            background: var(--white);
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: var(--transition);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233a4a5a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+
+        .designation-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.15);
+            outline: none;
+        }
+
+        /* Donate Button */
         .donate-box .btn {
             width: 100%;
+            max-width: 320px;
             font-size: 1.1rem;
             padding: 16px 38px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* === Kitufe cha Email chini ya fomu === */
+        .email-button-wrapper {
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+
+        .email-button-wrapper .email-btn {
+            display: inline-block;
+            background: #fca311;
+            color: #000;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid #fca311;
+        }
+
+        .email-button-wrapper .email-btn:hover {
+            background: #e0950f;
+            border-color: #e0950f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(252, 163, 17, 0.4);
+        }
+
+        .email-button-wrapper p {
+            margin-top: 8px;
+            color: #6b7280;
+            font-size: 0.8rem;
         }
 
         .donate-box .note {
@@ -442,9 +597,7 @@
             color: var(--accent);
         }
 
-        /* ============================================================
-               FOOTER (sawa kabisa na index)
-               ============================================================ */
+        /* FOOTER */
         .footer {
             background: var(--black);
             color: rgba(255, 255, 255, 0.7);
@@ -519,9 +672,7 @@
             color: var(--accent);
         }
 
-        /* ============================================================
-               RESPONSIVE (sawa na index)
-               ============================================================ */
+        /* RESPONSIVE */
         @media (max-width: 992px) {
             .donate-grid {
                 grid-template-columns: 1fr;
@@ -589,6 +740,14 @@
                 font-size: 0.8rem;
                 padding: 0 8px;
             }
+
+            .donate-box .donation-title {
+                font-size: 22px;
+            }
+
+            .donate-box .donation-subtitle {
+                font-size: 16px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -610,22 +769,29 @@
                 padding: 8px 14px;
                 font-size: 0.8rem;
             }
+
+            .donate-box .donation-title {
+                font-size: 20px;
+            }
+
+            .donate-box .donation-subtitle {
+                font-size: 14px;
+            }
+
+            .period-btn {
+                font-size: 0.7rem;
+                padding: 6px 12px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ============================================================
-    NAVBAR (sawa na index)
-    ============================================================ -->
+    <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
         <div class="container">
             <a href="index.html" class="logo-wrapper">
-                <img
-                src="https://i.imgur.com/zLjuRyK.png"
-                alt="Hope4Future Foundation"
-                class="logo-icon"
-                />
+                <img src="https://i.imgur.com/zLjuRyK.png" alt="Hope4Future Foundation" class="logo-icon" />
                 <div class="logo-text">
                     <span class="main">Hope<span>4Future</span></span>
                     <span class="sub">Foundation</span>
@@ -640,7 +806,14 @@
                 <li><a href="stories.html">Success Stories</a></li>
                 <li><a href="leadership.html">Leadership</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a href="donate.html" class="btn btn-primary active-link">Donate Now</a></li>
+                <!-- Kitufe cha EMAIL badala ya Donate Now -->
+                <li>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hope4futuretaz@gmail.com&su=Message%20from%20Website&body=Name%3A%0D%0AEmail%3A%0D%0AMessage%3A" 
+                       target="_blank" 
+                       class="btn-email">
+                        <i class="fas fa-envelope" style="margin-right: 6px;"></i> Email
+                    </a>
+                </li>
             </ul>
 
             <div class="hamburger" id="hamburger">
@@ -649,9 +822,7 @@
         </div>
     </nav>
 
-    <!-- ============================================================
-    PAGE HEADER (kama hero ya index)
-    ============================================================ -->
+    <!-- PAGE HEADER -->
     <section class="page-header">
         <div class="container">
             <h1>Support <span>Our Work</span></h1>
@@ -662,62 +833,125 @@
         </div>
     </section>
 
-    <!-- ============================================================
-    DONATE CONTENT
-    ============================================================ -->
+    <!-- DONATE SECTION -->
     <section class="donate-section">
         <div class="container">
             <div class="donate-grid">
-                <!-- Info -->
-           
+                <!-- LEFT: GENERAL NEEDS -->
+                <div class="donate-info">
+                    <h3>General <span>Needs</span></h3>
+                    <p>
+                        We want every child and youth in our program to have the opportunity
+                        to grow, learn, and thrive. Your generosity helps provide children
+                        and youth with the essential care and support they need to build a
+                        brighter future.
+                    </p>
+                    <p>
+                        General funds are used to meet urgent needs, supplement educational
+                        and medical expenses, support children and youth who have joined the
+                        program while they wait for sponsorship, and help cover the
+                        administrative costs of operating our non-profit.
+                    </p>
+                    <p style="margin-top: 16px; font-weight: 500; color: var(--oxford-blue);">
+                        Thank you for partnering with us to bring hope and lasting change.
+                    </p>
 
+                    <div class="method">
+                        <i class="fas fa-graduation-cap"></i>
+                        <div>
+                            <strong>Education</strong>
+                            <p>School support and learning materials</p>
+                        </div>
+                    </div>
+                    <div class="method">
+                        <i class=></i>
+                        <div>
+                            <strong></strong>
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="method">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <strong>Protection</strong>
+                            <p>Protecting children and youth from abuse</p>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- RIGHT: DONATION FORM -->
+                <div class="donate-box">
+                    <h2 class="donation-title">Hope4Future <span>Donation</span></h2>
+                    <p class="donation-subtitle">Select or enter an amount</p>
 
+                    <!-- Frequency -->
+                    <div class="frequency-group">
+                        <button class="freq-btn active" id="recurringBtn">🔁 Recurring</button>
+                        <button class="freq-btn" id="oneTimeBtn">⚡ One Time</button>
+                    </div>
 
+                    <!-- Period selector -->
+                    <div class="period-group show" id="periodGroup">
+                        <button class="period-btn active" data-period="biweekly">Bi-Weekly</button>
+                        <button class="period-btn" data-period="2months">Every 2 Months</button>
+                        <button class="period-btn" data-period="3months">Every 3 Months</button>
+                        <button class="period-btn" data-period="6months">Every 6 Months</button>
+                    </div>
 
+                    <!-- Preset amounts -->
+                    <div class="donate-amounts" id="amountGrid">
+                        <!-- populated by JS -->
+                    </div>
 
+                    <!-- Other -->
+                    <div class="input-group">
+                        <span>Other</span>
+                        <span>$</span>
+                        <input type="number" id="customAmount" placeholder="0.00" min="1" step="1" />
+                    </div>
 
+                    <!-- Designation Dropdown -->
+                    <div class="designation-group">
+                        <label for="designationSelect">Select a designation to donate to</label>
+                        <select id="designationSelect">
+                            <option value="general">School shoes</option>
+                            <option value="ongoing_hope">School uniform</option>
+                            <option value="needs">Daily school lunch</option>
+                            <option value="school_expansion">Exercise books / Notebooks</option>
+                            <option value="ongoing_school">Health services like health insurance</option>
+                            <option value="project">Land to start the school</option>
+                            <option value="hope_house_expansion">School bag</option>
+                            <option value="class_of_2036">Sanitary pads for girls</option>
+                        </select>
+                    </div>
 
+                   
 
+                    <!-- === KITUFE CHA EMAIL CHINI (ulichotuma) === -->
+                    <div class="email-button-wrapper">
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hope4futuretaz@gmail.com&su=Message%20from%20Website&body=Name%3A%0D%0AEmail%3A%0D%0AMessage%3A" 
+                           target="_blank" 
+                           class="email-btn">
+                            <i class="fas fa-envelope" style="margin-right: 8px;"></i> Email Us
+                        </a>
+                        <p>Clicking will open Gmail in a new tab. Fill in your details and we'll respond soon.</p>
+                    </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    <p class="note">
+                        <i class="fas fa-lock"></i> Your donation is secure and confidential.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================================
-    FOOTER (sawa na index)
-    ============================================================ -->
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
-                <!-- Brand -->
                 <div>
                     <a href="index.html" class="logo-wrapper" style="margin-bottom:12px;">
-                        <img
-                        src="https://i.imgur.com/zLjuRyK.png"
-                        alt="Hope4Future Foundation"
-                        style="height:48px; width:auto;"
-                        />
+                        <img src="https://i.imgur.com/zLjuRyK.png" alt="Hope4Future Foundation" style="height:48px; width:auto;" />
                         <div class="logo-text">
                             <span class="main">Hope<span>4Future</span></span>
                             <span class="sub" style="background:rgba(252,163,17,0.15); color:var(--accent);">Foundation</span>
@@ -735,7 +969,6 @@
                     </div>
                 </div>
 
-                <!-- Quick Links -->
                 <div>
                     <h4>Quick Links</h4>
                     <a href="index.html">Home</a><br />
@@ -744,7 +977,6 @@
                     <a href="donate.html">Donate</a>
                 </div>
 
-                <!-- Programs -->
                 <div>
                     <h4>Programs</h4>
                     <a href="programs.html">Education Support</a><br />
@@ -752,10 +984,9 @@
                     <a href="programs.html">Child Protection</a>
                 </div>
 
-                <!-- Contact -->
                 <div>
-                    <h4>Contact</h4>
-                    <p>P.O. Box 281, Hai kilimanjaro</p>
+                    <h4>Contact Us</h4>
+                    <p>P.O. Box 281, Hai Kilimanjaro</p>
                     <p>+255 762231902</p>
                     <p>hope4futuretaz@gmail.com</p>
                 </div>
@@ -767,31 +998,52 @@
         </div>
     </footer>
 
-    <!-- ============================================================
-    JAVASCRIPT (sawa na index + donate logic)
-    ============================================================ -->
+    <!-- JAVASCRIPT -->
     <script>
         (function() {
             'use strict';
 
+            // =========================================================
+            // DATA: amount presets per period
+            // =========================================================
+            const periodAmounts = {
+                biweekly: [25, 50, 100, 250],
+                '2months': [100, 200, 400, 1000],
+                '3months': [150, 300, 600, 1500],
+                '6months': [300, 600, 1200, 3000]
+            };
+
+            const oneTimeAmounts = [50, 100, 200, 500];
+
+            let currentFrequency = 'recurring';
+            let currentPeriod = 'biweekly';
+            let currentAmounts = periodAmounts[currentPeriod];
+
+            // DOM refs
+            const recurringBtn = document.getElementById('recurringBtn');
+            const oneTimeBtn = document.getElementById('oneTimeBtn');
+            const periodGroup = document.getElementById('periodGroup');
+            const amountGrid = document.getElementById('amountGrid');
+            const customInput = document.getElementById('customAmount');
+            const donateBtn = document.getElementById('donateBtn');
+            const designationSelect = document.getElementById('designationSelect');
+
+            // =========================================================
+            // NAVBAR
+            // =========================================================
             const hamburger = document.getElementById('hamburger');
             const navLinks = document.getElementById('navLinks');
 
             hamburger.addEventListener('click', function() {
                 navLinks.classList.toggle('open');
                 const icon = this.querySelector('i');
-                if (navLinks.classList.contains('open')) {
-                    icon.className = 'fas fa-times';
-                } else {
-                    icon.className = 'fas fa-bars';
-                }
+                icon.className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
             });
 
             document.querySelectorAll('.nav-links a').forEach(function(link) {
                 link.addEventListener('click', function() {
                     navLinks.classList.remove('open');
-                    const icon = hamburger.querySelector('i');
-                    icon.className = 'fas fa-bars';
+                    document.querySelector('#hamburger i').className = 'fas fa-bars';
                 });
             });
 
@@ -799,73 +1051,139 @@
                 const nav = document.querySelector('.navbar .container');
                 if (!nav.contains(e.target) && navLinks.classList.contains('open')) {
                     navLinks.classList.remove('open');
-                    const icon = hamburger.querySelector('i');
-                    icon.className = 'fas fa-bars';
+                    document.querySelector('#hamburger i').className = 'fas fa-bars';
                 }
             });
 
-            // Navbar scroll shadow
+            // Navbar shadow
             const navbar = document.getElementById('navbar');
-            let lastScrollY = 0;
+            window.addEventListener('scroll', function() {
+                navbar.style.boxShadow = window.pageYOffset > 20 ?
+                    '0 4px 30px rgba(0,0,0,0.12)' :
+                    '0 4px 24px rgba(0,0,0,0.08)';
+            });
 
-            function handleNavScroll() {
-                const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-                if (scrollY > 20) {
-                    navbar.style.boxShadow = '0 4px 30px rgba(0,0,0,0.12)';
-                } else {
-                    navbar.style.boxShadow = '0 4px 24px rgba(0,0,0,0.08)';
-                }
-                lastScrollY = scrollY;
+            // =========================================================
+            // RENDER AMOUNTS
+            // =========================================================
+            function renderAmounts(amounts, highlightIndex) {
+                amountGrid.innerHTML = '';
+                amounts.forEach(function(val, idx) {
+                    const btn = document.createElement('button');
+                    btn.className = 'amount' + (idx === highlightIndex ? ' active' : '');
+                    btn.dataset.value = val;
+                    btn.textContent = '$' + val;
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.amount').forEach(function(b) { b.classList.remove(
+                            'active'); });
+                        this.classList.add('active');
+                        customInput.value = '';
+                    });
+                    amountGrid.appendChild(btn);
+                });
             }
 
-            window.addEventListener('scroll', handleNavScroll, { passive: true });
-            handleNavScroll();
+            // =========================================================
+            // UPDATE PERIOD
+            // =========================================================
+            function updateForPeriod(period) {
+                currentPeriod = period;
+                currentAmounts = periodAmounts[period];
+                renderAmounts(currentAmounts, 0);
+                document.querySelectorAll('.period-btn').forEach(function(btn) {
+                    btn.classList.toggle('active', btn.dataset.period === period);
+                });
+            }
 
             // =========================================================
-            // DONATE LOGIC
+            // FREQUENCY SWITCH
             // =========================================================
-            const amounts = document.querySelectorAll('.donate-amounts .amount');
-            const customInput = document.getElementById('customAmount');
-
-            // Set default active
-            amounts.forEach(function(amt) {
-                if (amt.classList.contains('active')) {
-                    customInput.value = parseInt(amt.dataset.amount) * 1000;
+            function setFrequency(freq) {
+                currentFrequency = freq;
+                if (freq === 'recurring') {
+                    recurringBtn.classList.add('active');
+                    oneTimeBtn.classList.remove('active');
+                    periodGroup.classList.add('show');
+                    updateForPeriod(currentPeriod);
+                } else {
+                    recurringBtn.classList.remove('active');
+                    oneTimeBtn.classList.add('active');
+                    periodGroup.classList.remove('show');
+                    currentAmounts = oneTimeAmounts;
+                    renderAmounts(oneTimeAmounts, 0);
                 }
-            });
+                customInput.value = '';
+            }
 
-            amounts.forEach(function(amt) {
-                amt.addEventListener('click', function() {
-                    amounts.forEach(function(a) { a.classList.remove('active'); });
-                    this.classList.add('active');
-                    customInput.value = parseInt(this.dataset.amount) * 1000;
+            // =========================================================
+            // EVENT LISTENERS
+            // =========================================================
+            recurringBtn.addEventListener('click', function() { setFrequency('recurring'); });
+            oneTimeBtn.addEventListener('click', function() { setFrequency('onetime'); });
+
+            document.querySelectorAll('.period-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    if (currentFrequency === 'recurring') {
+                        updateForPeriod(this.dataset.period);
+                        customInput.value = '';
+                    }
                 });
             });
 
-            // Sync custom input with amounts
             customInput.addEventListener('input', function() {
-                var val = parseInt(this.value);
-                if (val && val > 0) {
-                    amounts.forEach(function(a) { a.classList.remove('active'); });
-                    // Check if matches any preset
-                    amounts.forEach(function(a) {
-                        if (parseInt(a.dataset.amount) * 1000 === val) {
-                            a.classList.add('active');
-                        }
-                    });
+                if (this.value.trim() !== '') {
+                    document.querySelectorAll('.amount').forEach(function(b) { b.classList.remove('active'); });
                 }
             });
 
-            // Donate button
-            document.getElementById('donateBtn').addEventListener('click', function() {
-                var val = parseInt(customInput.value);
-                if (!val || val < 1000) {
-                    alert('Please enter an amount of TSh 1,000 or more.');
+            // =========================================================
+            // DONATE BUTTON
+            // =========================================================
+            donateBtn.addEventListener('click', function() {
+                let amount = 0;
+                const activePreset = document.querySelector('.amount.active');
+                if (activePreset) {
+                    amount = parseFloat(activePreset.dataset.value);
+                }
+
+                const customVal = parseFloat(customInput.value.trim());
+                if (customVal && customVal > 0) {
+                    amount = customVal;
+                }
+
+                if (!amount || amount <= 0) {
+                    alert('Please select an amount or enter a valid amount (more than $0).');
                     return;
                 }
-                alert('Thank you for your donation of TSh ' + val.toLocaleString() +
-                    '! A confirmation will be sent to your email.');
+
+                const isRecurring = currentFrequency === 'recurring';
+                let freqText = isRecurring ? 'Recurring' : 'One Time';
+                if (isRecurring) {
+                    const periodMap = {
+                        biweekly: 'Bi-Weekly',
+                        '2months': 'Every 2 Months',
+                        '3months': 'Every 3 Months',
+                        '6months': 'Every 6 Months'
+                    };
+                    freqText += ' (' + periodMap[currentPeriod] + ')';
+                }
+
+                const designation = designationSelect.options[designationSelect.selectedIndex].text;
+
+                alert(
+                    'Thank you for your donation of $' + amount.toFixed(2) +
+                    ' (' + freqText + ')!\n\n' +
+                    'Designation: ' + designation + '\n\n' +
+                    'These funds will help empower children and youth of Hope4Future Foundation.\n' +
+                    'A confirmation message will be sent to your email.'
+                );
             });
+
+            // =========================================================
+            // INIT
+            // =========================================================
+            setFrequency('recurring');
+            updateForPeriod('biweekly');
 
         })();
     </script>
