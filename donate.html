@@ -571,6 +571,7 @@
             text-decoration: none;
             transition: all 0.3s ease;
             border: 2px solid #fca311;
+            cursor: pointer;
         }
 
         .email-button-wrapper .email-btn:hover {
@@ -806,12 +807,10 @@
                 <li><a href="stories.html">Success Stories</a></li>
                 <li><a href="leadership.html">Leadership</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <!-- Kitufe cha EMAIL badala ya Donate Now -->
+                <!-- Kitufe cha EMAIL (sasa kinatumia JavaScript) -->
                 <li>
-                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hope4futuretaz@gmail.com&su=Message%20from%20Website&body=Name%3A%0D%0AEmail%3A%0D%0AMessage%3A" 
-                       target="_blank" 
-                       class="btn-email">
-                        <i class="fas fa-envelope" style="margin-right: 6px;"></i> Email
+                    <a href="#" onclick="openGmail(event)" class="btn-email">
+                        <i class="fas fa-envelope" style="margin-right: 6px;"></i> donate
                     </a>
                 </li>
             </ul>
@@ -864,7 +863,7 @@
                         </div>
                     </div>
                     <div class="method">
-                        <i class=></i>
+                        <i class=""></i>
                         <div>
                             <strong></strong>
                             <p></p>
@@ -925,16 +924,17 @@
                         </select>
                     </div>
 
-                   
+                    <!-- Donate Button -->
+                    <button class="" id="donateBtn">
+                        <i class=""margin-right: 8px;"></i> 
+                    </button>
 
-                    <!-- === KITUFE CHA EMAIL CHINI (ulichotuma) === -->
+                    <!-- === KITUFE CHA EMAIL (sasa kinatumia JavaScript) === -->
                     <div class="email-button-wrapper">
-                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hope4futuretaz@gmail.com&su=Message%20from%20Website&body=Name%3A%0D%0AEmail%3A%0D%0AMessage%3A" 
-                           target="_blank" 
-                           class="email-btn">
+                        <a href="#" onclick="openGmail(event)" class="email-btn">
                             <i class="fas fa-envelope" style="margin-right: 8px;"></i> Email Us
                         </a>
-                        <p>Clicking will open Gmail in a new tab. Fill in your details and we'll respond soon.</p>
+                        <p>Opens Gmail with our address already filled in.</p>
                     </div>
 
                     <p class="note">
@@ -1186,6 +1186,31 @@
             updateForPeriod('biweekly');
 
         })();
+
+        // =========================================================
+        // FUNCTION YA KUFUNGUA EMAIL (kama kwenye contact page)
+        // =========================================================
+        function openGmail(e) {
+            e.preventDefault();
+
+            var to = 'hope4futuretaz@gmail.com';
+            var subject = 'Donation Inquiry from Website';
+            var body = 'Name: \n\nEmail: \n\nMessage: \n\n---\nSent from Hope4Future Donation Page';
+
+            // Angalia kama ni simu au kompyuta
+            var isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                // Simu: Tumia mailto: inafungua Gmail app au default email app
+                window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+            } else {
+                // Kompyuta: Tumia Gmail kwenye browser
+                var url = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(to) +
+                    '&su=' + encodeURIComponent(subject) +
+                    '&body=' + encodeURIComponent(body);
+                window.open(url, '_blank');
+            }
+        }
     </script>
 
 </body>
