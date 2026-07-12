@@ -736,9 +736,10 @@
                 <li><a href="media.html">Media Center</a></li>
                 <li><a href="stories.html">Success Stories</a></li>
                 <li><a href="leadership.html">Leadership</a></li> 
-                <li><a href="volunteer.html">Volunteer</a><br />
+                <li><a href="volunteer.html">Volunteer</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <a href="#" onclick="openGmail(event)" class="btn-email">
+                <li>
+                    <a href="#" onclick="openGmail(event)" class="btn-email">
                         <i class="fas fa-envelope" style="margin-right:6px;"></i> donate
                     </a>
                 </li>
@@ -836,8 +837,6 @@
                     <h3>Host Team</h3>
                     <ul>
                         <li>We welcome and host teams from various countries</li>
-                        
-                        
                     </ul>
                 </div>
             </div>
@@ -851,10 +850,13 @@
 
                 <form id="volunteerForm" novalidate>
                     <div class="form-grid">
+                        <!-- Full Name -->
                         <div class="form-group full-width">
                             <label for="fullName">Full Name <span class="required">*</span></label>
                             <input type="text" id="fullName" name="fullName" placeholder=" " required />
                         </div>
+
+                        <!-- Email & Phone -->
                         <div class="form-group">
                             <label for="email">Email <span class="required">*</span></label>
                             <input type="email" id="email" name="email" placeholder="" required />
@@ -863,6 +865,14 @@
                             <label for="phone">Phone Number <span class="required">*</span></label>
                             <input type="tel" id="phone" name="phone" placeholder="+" required />
                         </div>
+
+                        <!-- 🌍 COUNTRY – SEHEMU MPYA -->
+                        <div class="form-group full-width">
+                            <label for="country">Country <span class="required">*</span></label>
+                            <input type="text" id="country" name="country" placeholder="e.g. Tanzania" required />
+                        </div>
+
+                        <!-- Preferred Volunteer Area -->
                         <div class="form-group full-width">
                             <label>Preferred Volunteer Area <span class="required">*</span></label>
                             <div class="position-options" id="positionOptions">
@@ -893,19 +903,27 @@
                             </div>
                             <div class="hint">Choose only one of these areas.</div>
                         </div>
+
+                        <!-- Experience -->
                         <div class="form-group full-width">
                             <label for="experience">Describe your experience or skills in the chosen area <span class="required">*</span></label>
                             <textarea id="experience" name="experience" placeholder="Briefly write your experience, training, or why you are a good fit..." required></textarea>
                         </div>
+
+                        <!-- Availability -->
                         <div class="form-group full-width">
                             <label for="availability">Your Availability</label>
                             <input type="text" id="availability" name="availability" placeholder="e.g. Volunteer hours, weekdays, or occasionally" />
                             <div class="hint">Specify the time and days you can volunteer.</div>
                         </div>
+
+                        <!-- Additional Message -->
                         <div class="form-group full-width">
                             <label for="message">Additional Message (optional)</label>
                             <textarea id="message" name="message" placeholder="Write anything you'd like to add..."></textarea>
                         </div>
+
+                        <!-- Submit Button -->
                         <div class="form-group full-width" style="display:flex; justify-content:flex-start; margin-top:0.2rem;">
                             <button type="submit" class="btn-submit">
                                 <i class="fas fa-paper-plane"></i> Submit Application
@@ -1023,7 +1041,7 @@
             });
 
             // =========================================================
-            // VOLUNTEER FORM – SEND TO WHATSAPP (FALLBACK IMESHIKANA)
+            // VOLUNTEER FORM – SEND TO WHATSAPP (with COUNTRY)
             // =========================================================
             const form = document.getElementById('volunteerForm');
             const successMsg = document.getElementById('successMessage');
@@ -1088,22 +1106,23 @@
                     } else if (!radioChecked) {
                         document.getElementById('posA').focus();
                     }
-                    alert('Tafadhali jaza sehemu zote zilizo na * na chagua eneo la kujitolea.');
+                    alert('Please fill in all fields marked with * and select your volunteer area.');
                     return;
                 }
 
                 // ---- CHUKUA DATA ----
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
-                console.log('✅ Data zilizokusanywa:', data); // Angalia console
+                console.log('✅ Data zilizokusanywa:', data);
 
-                // ---- ANDAA UJUMBE ----
+                // ---- ANDAA UJUMBE (sasa inajumuisha COUNTRY) ----
                 const phoneNumber = '255762231902';
                 const message = `🧑‍💼 *Volunteer Application from Hope4Future Foundation*
 
         📌 *Full Name:* ${data.fullName}
         📧 *Email:* ${data.email}
         📞 *Phone:* ${data.phone}
+        🌍 *Country:* ${data.country}
         🎯 *Preferred Area:* ${data.position}
         📝 *Experience/Skills:* ${data.experience}
         📅 *Availability:* ${data.availability || 'Not specified'}
@@ -1112,14 +1131,14 @@
         --- Sent via website volunteer form ---`;
 
                 const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-                console.log('🔗 WhatsApp URL:', url); // Angalia console
+                console.log('🔗 WhatsApp URL:', url);
 
                 // ---- JARIBU KUELEKEZA MOJA KWA MOJA ----
                 window.location.href = url;
 
                 // ---- ONYESHA SUCCESS MESSAGE NA FALLBACK LINK ----
                 successMsg.classList.add('show');
-                manualLink.href = url; // Weka link kwa ajili ya kukokotoa
+                manualLink.href = url;
                 manualLink.target = '_blank';
                 successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
@@ -1169,7 +1188,7 @@
 
             var to = 'hope4futuretaz@gmail.com';
             var subject = 'Volunteer Inquiry from Website';
-            var body = 'Name: \n\nEmail: \n\nPhone: \n\nPreferred Area: \n\nExperience: \n\nMessage: \n\n---\nSent from Hope4Future Volunteer Page';
+            var body = 'Name: \n\nEmail: \n\nPhone: \n\nCountry: \n\nPreferred Area: \n\nExperience: \n\nMessage: \n\n---\nSent from Hope4Future Volunteer Page';
 
             var isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
 
