@@ -390,6 +390,16 @@
             width: 100%;
         }
 
+        /* Make select consistent */
+        .form-group select {
+            appearance: auto;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%233a4a5a" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            padding-right: 2.8rem;
+        }
+
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
@@ -866,10 +876,21 @@
                             <input type="tel" id="phone" name="phone" placeholder="+" required />
                         </div>
 
-                        <!-- 🌍 COUNTRY – SEHEMU MPYA -->
+                        <!-- COUNTRY -->
                         <div class="form-group full-width">
                             <label for="country">Country <span class="required">*</span></label>
                             <input type="text" id="country" name="country" placeholder="" required />
+                        </div>
+
+                        <!-- GENDER – DROPDOWN -->
+                        <div class="form-group full-width">
+                            <label for="gender">Gender <span class="required">*</span></label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select your gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                
+                            </select>
                         </div>
 
                         <!-- Preferred Volunteer Area -->
@@ -1041,12 +1062,13 @@
             });
 
             // =========================================================
-            // VOLUNTEER FORM – SEND TO WHATSAPP (with COUNTRY)
+            // VOLUNTEER FORM – SEND TO WHATSAPP (with GENDER dropdown)
             // =========================================================
             const form = document.getElementById('volunteerForm');
             const successMsg = document.getElementById('successMessage');
             const manualLink = document.getElementById('manualWhatsAppLink');
             const requiredInputs = form.querySelectorAll('[required]');
+            const genderSelect = document.getElementById('gender');
 
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -1055,12 +1077,23 @@
                 requiredInputs.forEach(function(input) {
                     input.style.borderColor = '';
                 });
+                document.getElementById('positionOptions').style.border = 'none';
+                document.getElementById('positionOptions').style.padding = '0';
 
                 let isValid = true;
 
-                // Validate text/email/textarea
+                // Validate text/email/textarea/select
                 requiredInputs.forEach(function(input) {
                     if (input.type === 'radio') return;
+                    if (input.tagName === 'SELECT') {
+                        if (!input.value || input.value === '') {
+                            input.style.borderColor = '#b91c1c';
+                            isValid = false;
+                        } else {
+                            input.style.borderColor = '#86efac';
+                        }
+                        return;
+                    }
                     if (!input.value || input.value.trim() === '') {
                         input.style.borderColor = '#b91c1c';
                         isValid = false;
@@ -1069,19 +1102,14 @@
                     }
                 });
 
-                // Validate radio
+                // Validate position radio
                 const radioButtons = form.querySelectorAll('input[name="position"]');
                 const radioChecked = Array.from(radioButtons).some(function(r) { return r.checked; });
-                const radioContainer = document.getElementById('positionOptions');
-
                 if (!radioChecked) {
-                    radioContainer.style.border = '2px solid #b91c1c';
-                    radioContainer.style.borderRadius = '12px';
-                    radioContainer.style.padding = '0.5rem';
+                    document.getElementById('positionOptions').style.border = '2px solid #b91c1c';
+                    document.getElementById('positionOptions').style.borderRadius = '12px';
+                    document.getElementById('positionOptions').style.padding = '0.5rem';
                     isValid = false;
-                } else {
-                    radioContainer.style.border = 'none';
-                    radioContainer.style.padding = '0';
                 }
 
                 // Email format
@@ -1106,7 +1134,7 @@
                     } else if (!radioChecked) {
                         document.getElementById('posA').focus();
                     }
-                    alert('Please fill in all fields marked with * and select your volunteer area.');
+                    alert('Please fill in all fields marked with *, select your volunteer area, and choose your gender.');
                     return;
                 }
 
@@ -1115,7 +1143,7 @@
                 const data = Object.fromEntries(formData.entries());
                 console.log('✅ Data zilizokusanywa:', data);
 
-                // ---- ANDAA UJUMBE (sasa inajumuisha COUNTRY) ----
+                // ---- ANDAA UJUMBE (sasa inajumuisha GENDER kutoka dropdown) ----
                 const phoneNumber = '255762231902';
                 const message = `🧑‍💼 *Volunteer Application from Hope4Future Foundation*
 
@@ -1123,6 +1151,7 @@
         📧 *Email:* ${data.email}
         📞 *Phone:* ${data.phone}
         🌍 *Country:* ${data.country}
+        ⚥ *Gender:* ${data.gender}
         🎯 *Preferred Area:* ${data.position}
         📝 *Experience/Skills:* ${data.experience}
         📅 *Availability:* ${data.availability || 'Not specified'}
@@ -1152,24 +1181,38 @@
                 }, 5000);
             });
 
-            // Real-time validation
+            // Real-time validation (including select)
             requiredInputs.forEach(function(input) {
-                if (input.type !== 'radio') {
-                    input.addEventListener('input', function() {
-                        if (this.value.trim() !== '') {
+                if (input.type === 'radio') return;
+                input.addEventListener('input', function() {
+                    if (this.tagName === 'SELECT') {
+                        if (this.value && this.value !== '') {
                             this.style.borderColor = '#86efac';
                         } else {
                             this.style.borderColor = '#e2e8f0';
                         }
-                    });
-                    input.addEventListener('blur', function() {
-                        if (this.value.trim() === '' && this.hasAttribute('required')) {
+                        return;
+                    }
+                    if (this.value.trim() !== '') {
+                        this.style.borderColor = '#86efac';
+                    } else {
+                        this.style.borderColor = '#e2e8f0';
+                    }
+                });
+                input.addEventListener('blur', function() {
+                    if (this.tagName === 'SELECT') {
+                        if ((!this.value || this.value === '') && this.hasAttribute('required')) {
                             this.style.borderColor = '#b91c1c';
                         }
-                    });
-                }
+                        return;
+                    }
+                    if (this.value.trim() === '' && this.hasAttribute('required')) {
+                        this.style.borderColor = '#b91c1c';
+                    }
+                });
             });
 
+            // Clear position error on selection
             document.querySelectorAll('input[name="position"]').forEach(function(radio) {
                 radio.addEventListener('change', function() {
                     const container = document.getElementById('positionOptions');
@@ -1188,7 +1231,7 @@
 
             var to = 'hope4futuretaz@gmail.com';
             var subject = 'Volunteer Inquiry from Website';
-            var body = 'Name: \n\nEmail: \n\nPhone: \n\nCountry: \n\nPreferred Area: \n\nExperience: \n\nMessage: \n\n---\nSent from Hope4Future Volunteer Page';
+            var body = 'Name: \n\nEmail: \n\nPhone: \n\nCountry: \n\nGender: \n\nPreferred Area: \n\nExperience: \n\nMessage: \n\n---\nSent from Hope4Future Volunteer Page';
 
             var isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
 
