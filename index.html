@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
         /* ============================================================
-           CSS CUSTOM PROPERTIES — Nova Color Palette
-           ============================================================ */
+               CSS CUSTOM PROPERTIES — Nova Color Palette
+               ============================================================ */
         :root {
             --black: #000000ff;
             --oxford-blue: #14213dff;
@@ -16,6 +16,7 @@
             --platinum: #e5e5e5ff;
             --white: #ffffffff;
 
+            /* Semantic aliases */
             --primary: var(--oxford-blue);
             --primary-dark: var(--black);
             --accent: var(--orange-web);
@@ -29,8 +30,8 @@
         }
 
         /* ============================================================
-           RESET & BASE
-           ============================================================ */
+               RESET & BASE
+               ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -65,8 +66,8 @@
         }
 
         /* ============================================================
-           BUTTONS
-           ============================================================ */
+               BUTTONS
+               ============================================================ */
         .btn {
             display: inline-block;
             padding: 14px 38px;
@@ -123,8 +124,8 @@
         }
 
         /* ============================================================
-           NAVBAR
-           ============================================================ */
+               NAVBAR
+               ============================================================ */
         .navbar {
             background: var(--white);
             box-shadow: var(--shadow);
@@ -211,8 +212,8 @@
         }
 
         /* ============================================================
-           HERO
-           ============================================================ */
+               HERO
+               ============================================================ */
         .hero {
             padding: 140px 0 80px;
             background: var(--oxford-blue);
@@ -221,6 +222,7 @@
             overflow: hidden;
         }
 
+        /* subtle accent glow */
         .hero::before {
             content: '';
             position: absolute;
@@ -267,24 +269,24 @@
             flex-wrap: wrap;
         }
 
-        .hero-image .placeholder {
-            width: 100%;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    .hero-image .placeholder img {
+    width: 100%;
+    height: auto;           /* <-- UREFU UNAJIREKEBISHA */
+    display: block;         /* <-- Ondoa nafasi ndogo chini ya picha */
+    /* object-fit: cover;  <-- IMEONDOLWA */
+}
+}
         }
 
         .hero-image .placeholder img {
             width: 100%;
-            height: 350px;
+            height: 100%;
             object-fit: cover;
-            transition: opacity 0.5s ease;
-            display: block;
         }
 
         /* ============================================================
-           SECTION
-           ============================================================ */
+               SECTION
+               ============================================================ */
         section {
             padding: 80px 0;
         }
@@ -310,8 +312,8 @@
         }
 
         /* ============================================================
-           HOME CARDS
-           ============================================================ */
+               HOME CARDS
+               ============================================================ */
         .home-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -352,8 +354,8 @@
         }
 
         /* ============================================================
-           FOOTER
-           ============================================================ */
+               FOOTER
+               ============================================================ */
         .footer {
             background: var(--black);
             color: rgba(255, 255, 255, 0.7);
@@ -429,8 +431,8 @@
         }
 
         /* ============================================================
-           RESPONSIVE
-           ============================================================ */
+               RESPONSIVE
+               ============================================================ */
         @media (max-width: 992px) {
             .hero .container {
                 grid-template-columns: 1fr;
@@ -447,8 +449,8 @@
             }
 
             .hero-image .placeholder {
-                max-width: 500px;
                 margin: 0 auto;
+                max-width: 400px;
             }
 
             .footer-grid {
@@ -485,10 +487,6 @@
 
             .hero {
                 padding: 120px 0 60px;
-            }
-
-            .hero-image .placeholder img {
-                height: 250px;
             }
 
             .section-title {
@@ -536,10 +534,6 @@
             .home-card i {
                 font-size: 2rem;
             }
-
-            .hero-image .placeholder img {
-                height: 200px;
-            }
         }
     </style>
 </head>
@@ -552,9 +546,9 @@
         <div class="container">
             <a href="index.html" class="logo-wrapper">
                 <img
-                    src="https://i.imgur.com/zLjuRyK.png"
-                    alt="Hope4Future Foundation"
-                    class="logo-icon"
+                src="https://i.imgur.com/zLjuRyK.png"
+                alt="Hope4Future Foundation"
+                class="logo-icon"
                 />
                 <div class="logo-text">
                     <span class="main">Hope<span>4Future</span></span>
@@ -569,6 +563,7 @@
                 <li><a href="media.html">Media Center</a></li>
                 <li><a href="stories.html">Success Stories</a></li>
                 <li><a href="leadership.html">Leadership</a></li>
+                <!-- TUMEONGEZA Volunteer na Contact tofauti -->
                 <li><a href="volunteer.html">Volunteer</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="donate.html" class="btn btn-primary">Donate Now</a></li>
@@ -581,7 +576,7 @@
     </nav>
 
     <!-- ============================================================
-    HERO — SLIDESHOW
+    HERO
     ============================================================ -->
     <section class="hero" id="home">
         <div class="container">
@@ -590,7 +585,7 @@
                     Building a <span>Better Future</span><br />Through Education &amp; Skills
                 </h1>
                 <p>
-                    Empower vulnerable children and youth in Tanzania at risk of missing out on education through quality education, skills training, and protection.
+                    empower vulnerable children and youth in Tanzania at risk of missing out on education through quality education, skills training, and protection.
                 </p>
                 <div class="btn-group">
                     <a href="donate.html" class="btn btn-primary">Donate Now</a>
@@ -601,9 +596,8 @@
             <div class="hero-image">
                 <div class="placeholder">
                     <img
-                        id="heroSlide"
-                        src="https://iili.io/CwYmFbs.jpg"
-                        alt="Hope4Future Foundation"
+                    src="https://i.imgur.com/z6bpuVU.png"
+                    alt="Hope4Future Foundation"
                     />
                 </div>
             </div>
@@ -634,6 +628,7 @@
                     <i class="fas fa-star"></i>
                     <h4>Success Stories</h4>
                 </a>
+                <!-- TUMEONGEZA KADI YA VOLUNTEER -->
                 <a href="volunteer.html" class="home-card">
                     <i class="fas fa-hands-helping"></i>
                     <h4>Volunteer</h4>
@@ -656,9 +651,9 @@
                 <div>
                     <a href="index.html" class="logo-wrapper" style="margin-bottom:12px;">
                         <img
-                            src="https://i.imgur.com/zLjuRyK.png"
-                            alt="Hope4Future Foundation"
-                            style="height:48px; width:auto;"
+                        src="https://i.imgur.com/zLjuRyK.png"
+                        alt="Hope4Future Foundation"
+                        style="height:48px; width:auto;"
                         />
                         <div class="logo-text">
                             <span class="main">Hope<span>4Future</span></span>
@@ -683,6 +678,7 @@
                     <a href="index.html">Home</a><br />
                     <a href="about.html">About</a><br />
                     <a href="programs.html">Programs</a><br />
+                    <!-- TUMEONGEZA Volunteer kwenye footer -->
                     <a href="volunteer.html">Volunteer</a><br />
                     <a href="donate.html">Donate</a>
                 </div>
@@ -711,39 +707,16 @@
     </footer>
 
     <!-- ============================================================
-    JAVASCRIPT — SLIDESHOW + NAV
+    JAVASCRIPT
     ============================================================ -->
     <script>
         (function() {
             'use strict';
 
-            // ---- HERO SLIDESHOW ----
-            const heroImg = document.getElementById('heroSlide');
-            const images = [
-                'https://iili.io/CwaLYMB.jpg',
-                'https://iili.io/CwYmFbs.jpg',
-                'https://iili.io/CwcYLHQ.jpg',
-                'https://iili.io/Cwcju71.jpg',
-                'https://iili.io/Cwaphe1.jpg'
-            ];
-            let currentIndex = 0;
-
-            function changeImage() {
-                currentIndex = (currentIndex + 1) % images.length;
-                heroImg.style.opacity = 0;
-                setTimeout(() => {
-                    heroImg.src = images[currentIndex];
-                    heroImg.style.opacity = 1;
-                }, 300);
-            }
-
-            // Start slideshow – change every 5 seconds (5000ms)
-            setInterval(changeImage, 5000);
-
-            // ---- MOBILE NAV ----
             const hamburger = document.getElementById('hamburger');
             const navLinks = document.getElementById('navLinks');
 
+            // Toggle mobile menu
             hamburger.addEventListener('click', function() {
                 navLinks.classList.toggle('open');
                 const icon = this.querySelector('i');
@@ -754,6 +727,7 @@
                 }
             });
 
+            // Close menu on link click
             document.querySelectorAll('.nav-links a').forEach(function(link) {
                 link.addEventListener('click', function() {
                     navLinks.classList.remove('open');
@@ -762,6 +736,7 @@
                 });
             });
 
+            // Close menu on outside click
             document.addEventListener('click', function(e) {
                 const nav = document.querySelector('.navbar .container');
                 if (!nav.contains(e.target) && navLinks.classList.contains('open')) {
@@ -773,12 +748,18 @@
 
             // ---- NAVBAR SCROLL SHADOW ----
             const navbar = document.getElementById('navbar');
+            let lastScrollY = 0;
+
             function handleNavScroll() {
                 const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-                navbar.style.boxShadow = scrollY > 20
-                    ? '0 4px 30px rgba(0,0,0,0.12)'
-                    : '0 4px 24px rgba(0,0,0,0.08)';
+                if (scrollY > 20) {
+                    navbar.style.boxShadow = '0 4px 30px rgba(0,0,0,0.12)';
+                } else {
+                    navbar.style.boxShadow = '0 4px 24px rgba(0,0,0,0.08)';
+                }
+                lastScrollY = scrollY;
             }
+
             window.addEventListener('scroll', handleNavScroll, { passive: true });
             handleNavScroll();
 
