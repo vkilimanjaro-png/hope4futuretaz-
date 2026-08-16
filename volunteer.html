@@ -390,7 +390,7 @@
             width: 100%;
         }
 
-        /* Make select consistent */
+        /* make select consistent */
         .form-group select {
             appearance: auto;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%233a4a5a" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>');
@@ -420,6 +420,35 @@
             font-size: 0.8rem;
             color: #9ca3af;
             margin-top: 0.15rem;
+        }
+
+        /* ===== style ya file input ===== */
+        .form-group input[type="file"] {
+            padding: 0.6rem 1rem;
+            border-radius: 50px;
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .form-group input[type="file"]:hover {
+            border-color: var(--accent);
+            background: #fef9e7;
+        }
+        .form-group input[type="file"]::file-selector-button {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            background: var(--accent);
+            color: var(--black);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-right: 1rem;
+        }
+        .form-group input[type="file"]::file-selector-button:hover {
+            background: #e0950f;
+            transform: scale(1.02);
         }
 
         .position-options {
@@ -889,8 +918,14 @@
                                 <option value="">Select your gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
-                                
                             </select>
+                        </div>
+
+                        <!-- PASSPORT SIZE PHOTO – INALAZIMA -->
+                        <div class="form-group full-width">
+                            <label for="passport">Passport Size Photo <span class="required">*</span></label>
+                            <input type="file" id="passport" name="passport" accept="image/*" required />
+                            <div class="hint">📸 Ukubwa: 35mm x 45mm, background plain. Picha itapakiwa mtandaoni na kiungo kitatumwa.</div>
                         </div>
 
                         <!-- Preferred Volunteer Area -->
@@ -946,7 +981,7 @@
 
                         <!-- Submit Button -->
                         <div class="form-group full-width" style="display:flex; justify-content:flex-start; margin-top:0.2rem;">
-                            <button type="submit" class="btn-submit">
+                            <button type="submit" class="btn-submit" id="submitBtn">
                                 <i class="fas fa-paper-plane"></i> Submit Application
                             </button>
                         </div>
@@ -1029,6 +1064,11 @@
         (function() {
             'use strict';
 
+            // ==========================================================
+            // 🔑 API KEY IMESHAPACHIKWA (Tayari ipo!)
+            // ==========================================================
+            const IMGBB_API_KEY = '20ba1e3b87490a07b533e7a46c52029e';
+
             // NAVBAR
             const hamburger = document.getElementById('hamburger');
             const navLinks = document.getElementById('navLinks');
@@ -1062,13 +1102,45 @@
             });
 
             // =========================================================
-            // VOLUNTEER FORM – SEND TO WHATSAPP (with GENDER dropdown)
+            // FUNCTION: PAKIA PICHA IMBGG
+            // =========================================================
+            function uploadToImgBB(file) {
+                return new Promise(function(resolve, reject) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const base64Image = e.target.result.split(',')[1];
+                        const formData = new FormData();
+                        formData.append('key', IMGBB_API_KEY);
+                        formData.append('image', base64Image);
+
+                        fetch('https://api.imgbb.com/1/upload', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(function(response) { return response.json(); })
+                            .then(function(data) {
+                                if (data.success) {
+                                    resolve(data.data.display_url || data.data.url);
+                                } else {
+                                    reject(new Error(data.error ? data
+                                    .error.message : 'ImgBB upload failed'));
+                                }
+                            })
+                            .catch(function(err) { reject(err); });
+                    };
+                    reader.onerror = function(err) { reject(err); };
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // =========================================================
+            // VOLUNTEER FORM
             // =========================================================
             const form = document.getElementById('volunteerForm');
             const successMsg = document.getElementById('successMessage');
             const manualLink = document.getElementById('manualWhatsAppLink');
+            const submitBtn = document.getElementById('submitBtn');
             const requiredInputs = form.querySelectorAll('[required]');
-            const genderSelect = document.getElementById('gender');
 
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -1085,6 +1157,7 @@
                 // Validate text/email/textarea/select
                 requiredInputs.forEach(function(input) {
                     if (input.type === 'radio') return;
+                    if (input.type === 'file') return;
                     if (input.tagName === 'SELECT') {
                         if (!input.value || input.value === '') {
                             input.style.borderColor = '#b91c1c';
@@ -1101,6 +1174,15 @@
                         input.style.borderColor = '#86efac';
                     }
                 });
+
+                // Validate Passport Photo
+                const passportInput = document.getElementById('passport');
+                if (passportInput.files.length === 0) {
+                    passportInput.style.borderColor = '#b91c1c';
+                    isValid = false;
+                } else {
+                    passportInput.style.borderColor = '#86efac';
+                }
 
                 // Validate position radio
                 const radioButtons = form.querySelectorAll('input[name="position"]');
@@ -1134,24 +1216,48 @@
                     } else if (!radioChecked) {
                         document.getElementById('posA').focus();
                     }
-                    alert('Please fill in all fields marked with *, select your volunteer area, and choose your gender.');
+                    alert('Please fill in all fields marked with *, select an area, and upload your photo.');
                     return;
                 }
 
-                // ---- CHUKUA DATA ----
+                // ==========================================================
+                // 1. CHUKUA DATA ZA FOMU
+                // ==========================================================
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
-                console.log('✅ Data zilizokusanywa:', data);
 
-                // ---- ANDAA UJUMBE (sasa inajumuisha GENDER kutoka dropdown) ----
-                const phoneNumber = '255762231902';
-                const message = `🧑‍💼 *Volunteer Application from Hope4Future Foundation*
+                // ==========================================================
+                // 2. PAKIA PICHA KWA IMBGG
+                // ==========================================================
+                const file = passportInput.files[0];
+                const btnOriginalText = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> It goes to Hope4Future Foundation...';
+
+                uploadToImgBB(file)
+                    .then(function(imageUrl) {
+                        console.log('✅ Picha imepakiwa:', imageUrl);
+                        return imageUrl;
+                    })
+                    .catch(function(err) {
+                        console.warn('Upload error:', err);
+                        // Ikiwa imeshindwa, tumia jina la faili kama fallback
+                        alert('Kumekuwa na tatizo la kupakia picha, lakini tunatuma jina la faili. Jaribu tena baadaye.');
+                        return file.name;
+                    })
+                    .then(function(passportInfo) {
+                        // ==========================================================
+                        // 3. ANDAA UJUMBE WA WHATSAPP
+                        // ==========================================================
+                        const phoneNumber = '255762231902';
+                        const message = `🧑‍💼 *Volunteer Application from Hope4Future Foundation*
 
         📌 *Full Name:* ${data.fullName}
         📧 *Email:* ${data.email}
         📞 *Phone:* ${data.phone}
         🌍 *Country:* ${data.country}
         ⚥ *Gender:* ${data.gender}
+        📷 *Passport Photo (CLICK TO VIEW):* ${passportInfo}
         🎯 *Preferred Area:* ${data.position}
         📝 *Experience/Skills:* ${data.experience}
         📅 *Availability:* ${data.availability || 'Not specified'}
@@ -1159,31 +1265,38 @@
 
         --- Sent via website volunteer form ---`;
 
-                const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-                console.log('🔗 WhatsApp URL:', url);
+                        const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                        console.log('🔗 WhatsApp URL:', url);
 
-                // ---- JARIBU KUELEKEZA MOJA KWA MOJA ----
-                window.location.href = url;
+                        // ==========================================================
+                        // 4. ELEKEZA WHATSAPP & ONYESHA SUCCESS
+                        // ==========================================================
+                        window.location.href = url;
 
-                // ---- ONYESHA SUCCESS MESSAGE NA FALLBACK LINK ----
-                successMsg.classList.add('show');
-                manualLink.href = url;
-                manualLink.target = '_blank';
-                successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        successMsg.classList.add('show');
+                        manualLink.href = url;
+                        manualLink.target = '_blank';
+                        successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-                // ---- ZIMA KITUFE KWA MUDA ----
-                const btn = form.querySelector('.btn-submit');
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                setTimeout(function() {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
-                }, 5000);
+                        // Rejesha kitufe
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = btnOriginalText;
+                    });
             });
 
-            // Real-time validation (including select)
+            // Real-time validation (including file)
             requiredInputs.forEach(function(input) {
                 if (input.type === 'radio') return;
+                if (input.type === 'file') {
+                    input.addEventListener('change', function() {
+                        if (this.files.length > 0) {
+                            this.style.borderColor = '#86efac';
+                        } else {
+                            this.style.borderColor = '#e2e8f0';
+                        }
+                    });
+                    return;
+                }
                 input.addEventListener('input', function() {
                     if (this.tagName === 'SELECT') {
                         if (this.value && this.value !== '') {
