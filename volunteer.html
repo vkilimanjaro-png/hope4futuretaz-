@@ -422,33 +422,60 @@
             margin-top: 0.15rem;
         }
 
-        /* ===== style ya file input ===== */
-        .form-group input[type="file"] {
-            padding: 0.6rem 1rem;
-            border-radius: 50px;
-            background: #f1f5f9;
-            border: 2px dashed #cbd5e1;
-            cursor: pointer;
-            transition: var(--transition);
+        /* ===== style ya kitufe cha picha (badala ya file input default) ===== */
+        .file-upload-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.2rem;
         }
-        .form-group input[type="file"]:hover {
-            border-color: var(--accent);
-            background: #fef9e7;
-        }
-        .form-group input[type="file"]::file-selector-button {
-            padding: 0.5rem 1.5rem;
-            border: none;
-            border-radius: 30px;
+
+        .file-upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.8rem;
             background: var(--accent);
             color: var(--black);
             font-weight: 600;
+            border-radius: 50px;
+            border: none;
             cursor: pointer;
             transition: var(--transition);
-            margin-right: 1rem;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 12px rgba(252, 163, 17, 0.3);
         }
-        .form-group input[type="file"]::file-selector-button:hover {
+
+        .file-upload-btn:hover {
             background: #e0950f;
-            transform: scale(1.02);
+            transform: translateY(-2px);
+        }
+
+        .file-upload-btn i {
+            font-size: 1.1rem;
+        }
+
+        .file-name-display {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            background: #f1f5f9;
+            padding: 0.4rem 1.2rem;
+            border-radius: 30px;
+            border: 2px dashed #cbd5e1;
+            min-width: 120px;
+            transition: var(--transition);
+        }
+
+        .file-name-display.has-file {
+            border-color: #86efac;
+            background: #dcfce7;
+            color: #14532d;
+        }
+
+        /* Hidden file input */
+        #passport {
+            display: none;
         }
 
         .position-options {
@@ -731,6 +758,15 @@
                 width: 100%;
                 justify-content: center;
             }
+
+            .file-upload-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .file-name-display {
+                text-align: center;
+            }
         }
 
         @media (max-width: 480px) {
@@ -921,11 +957,19 @@
                             </select>
                         </div>
 
-                        <!-- PASSPORT SIZE PHOTO – INALAZIMA -->
+                        <!-- ==========================================================
+                        PASSPORT SIZE PHOTO – SASA HAKUNA "No file chosen"
+                        ========================================================== -->
                         <div class="form-group full-width">
                             <label for="passport">Passport Size Photo <span class="required">*</span></label>
+                            <div class="file-upload-wrapper">
+                                <button type="button" class="file-upload-btn" id="fileUploadBtn">
+                                    <i class="fas fa-camera"></i> Select JPG/PNG
+                                </button>
+                                <span class="file-name-display" id="fileNameDisplay"></span>
+                            </div>
                             <input type="file" id="passport" name="passport" accept="image/*" required />
-                            <div class="hint">📸 Ukubwa: 35mm x 45mm, background plain. Picha itapakiwa mtandaoni na kiungo kitatumwa.</div>
+                            <div class="hint">  </div>
                         </div>
 
                         <!-- Preferred Volunteer Area -->
@@ -1065,7 +1109,7 @@
             'use strict';
 
             // ==========================================================
-            // 🔑 API KEY IMESHAPACHIKWA (Tayari ipo!)
+            // 🔑 API KEY (imeshapachikwa)
             // ==========================================================
             const IMGBB_API_KEY = '20ba1e3b87490a07b533e7a46c52029e';
 
@@ -1099,6 +1143,29 @@
                 navbar.style.boxShadow = window.pageYOffset > 20 ?
                     '0 4px 30px rgba(0,0,0,0.12)' :
                     '0 4px 24px rgba(0,0,0,0.08)';
+            });
+
+            // ==========================================================
+            // FILE UPLOAD CUSTOM – ONDOA "No file chosen"
+            // ==========================================================
+            const fileInput = document.getElementById('passport');
+            const fileUploadBtn = document.getElementById('fileUploadBtn');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+            fileUploadBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    fileNameDisplay.textContent = this.files[0].name;
+                    fileNameDisplay.classList.add('has-file');
+                } else {
+                    fileNameDisplay.textContent = 'Hakuna picha';
+                    fileNameDisplay.classList.remove('has-file');
+                }
+                // Trigger validation styling (kama ilivyokuwa awali)
+                this.style.borderColor = this.files.length > 0 ? '#86efac' : '#e2e8f0';
             });
 
             // =========================================================
@@ -1179,9 +1246,14 @@
                 const passportInput = document.getElementById('passport');
                 if (passportInput.files.length === 0) {
                     passportInput.style.borderColor = '#b91c1c';
+                    // Pia tunaweza kuonyesha kwenye kitufe au display
+                    fileNameDisplay.style.borderColor = '#b91c1c';
+                    fileNameDisplay.style.background = '#fee2e2';
                     isValid = false;
                 } else {
                     passportInput.style.borderColor = '#86efac';
+                    fileNameDisplay.style.borderColor = '#86efac';
+                    fileNameDisplay.style.background = '#dcfce7';
                 }
 
                 // Validate position radio
@@ -1241,7 +1313,6 @@
                     })
                     .catch(function(err) {
                         console.warn('Upload error:', err);
-                        // Ikiwa imeshindwa, tumia jina la faili kama fallback
                         alert('Kumekuwa na tatizo la kupakia picha, lakini tunatuma jina la faili. Jaribu tena baadaye.');
                         return file.name;
                     })
@@ -1288,13 +1359,7 @@
             requiredInputs.forEach(function(input) {
                 if (input.type === 'radio') return;
                 if (input.type === 'file') {
-                    input.addEventListener('change', function() {
-                        if (this.files.length > 0) {
-                            this.style.borderColor = '#86efac';
-                        } else {
-                            this.style.borderColor = '#e2e8f0';
-                        }
-                    });
+                    // Hili tayari tumeshughulikia kupitia tukio la 'change' hapo juu
                     return;
                 }
                 input.addEventListener('input', function() {
@@ -1332,6 +1397,17 @@
                     container.style.border = 'none';
                     container.style.padding = '0';
                 });
+            });
+
+            // Kusafisha error ya file display inapobadilika
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    fileNameDisplay.style.borderColor = '#86efac';
+                    fileNameDisplay.style.background = '#dcfce7';
+                } else {
+                    fileNameDisplay.style.borderColor = '#cbd5e1';
+                    fileNameDisplay.style.background = '#f1f5f9';
+                }
             });
 
         })();
