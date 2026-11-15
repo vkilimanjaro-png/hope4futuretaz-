@@ -297,7 +297,131 @@
             display: block;
         }
 
-        /* MEDIA GRID - no delete buttons, no forms */
+        /* ============================================================
+               MPYA: MASONRY GALLERY (PICHA KARIBU KARIBU)
+               ============================================================ */
+        /* Hapa tunatumia columns badala ya grid ili picha zipangane kama matofali */
+        .photo-gallery {
+            column-count: 4; /* Idadi ya safu kwenye kompyuta */
+            column-gap: 8px; /* Nafasi ndogo sana kati ya picha */
+            width: 100%;
+        }
+
+        .gallery-item {
+            break-inside: avoid; /* Inazuia picha kugawanyika kati */
+            margin-bottom: 8px; /* Nafasi ndogo chini ya picha */
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .gallery-item:hover {
+            transform: scale(0.98); /* Inapungua kidogo ikiguswa */
+            opacity: 0.9;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            display: block;
+            height: auto; /* Picha inachukua urefu wake halisi bila kukatwa */
+            object-fit: cover;
+        }
+
+        /* ============================================================
+               KITUFE CHA DUARA CHA UPLOAD (Floating Button)
+               ============================================================ */
+        .floating-upload-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(252, 163, 17, 0.5);
+            cursor: pointer;
+            border: none;
+            z-index: 999;
+            transition: var(--transition);
+        }
+
+        .floating-upload-btn:hover {
+            transform: scale(1.1);
+            background: #e0950f;
+        }
+
+        /* ============================================================
+               MODAL YA PASSWORD
+               ============================================================ */
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .password-modal.active {
+            display: flex;
+        }
+
+        .password-box {
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .password-box h3 {
+            margin-bottom: 15px;
+            color: var(--oxford-blue);
+        }
+
+        .password-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .password-box input:focus {
+            border-color: var(--accent);
+        }
+
+        .password-box .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .password-box .btn-group button {
+            flex: 1;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* ============================================================
+               VIDEO & BROCHURE CARDS (ZILE ZA AWALI)
+               ============================================================ */
         .media-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -312,6 +436,7 @@
             overflow: hidden;
             transition: var(--transition);
             border: 1px solid rgba(0, 0, 0, 0.04);
+            position: relative; 
         }
 
         .media-item:hover {
@@ -337,10 +462,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-
-        .media-item .media-thumb i {
-            color: var(--accent);
         }
 
         .media-item .media-body {
@@ -377,30 +498,6 @@
 
         .media-item .media-body .meta a:hover {
             color: var(--accent);
-        }
-
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-light);
-            grid-column: 1 / -1;
-        }
-
-        .empty-state i {
-            font-size: 4rem;
-            color: #e5e7eb;
-            margin-bottom: 16px;
-        }
-
-        .empty-state i.fa-video {
-            color: #dc3545;
-        }
-        .empty-state i.fa-images {
-            color: #28a745;
-        }
-        .empty-state i.fa-file-pdf {
-            color: #dc3545;
         }
 
         /* ============================================================
@@ -481,11 +578,14 @@
         }
 
         /* ============================================================
-               RESPONSIVE
+               RESPONSIVE (KWA AJILI YA SIMU NA TABLETI)
                ============================================================ */
         @media (max-width: 992px) {
             .footer-grid {
                 grid-template-columns: 1fr 1fr;
+            }
+            .photo-gallery {
+                column-count: 3; /* Punguza safu kwenye tablet */
             }
         }
 
@@ -546,6 +646,18 @@
                 font-size: 0.8rem;
                 padding: 0 8px;
             }
+            
+            .floating-upload-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .photo-gallery {
+                column-count: 2; /* Punguza safu kwenye simu */
+            }
         }
 
         @media (max-width: 480px) {
@@ -600,7 +712,7 @@
                 <li><a href="media.html" class="active-link">Media Center</a></li>
                 <li><a href="stories.html">Success Stories</a></li>
                 <li><a href="leadership.html">Leadership</a></li>
-                <li><a href="volunteer.html">Volunteer</a><br />
+                <li><a href="volunteer.html">Volunteer</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="donate.html" class="btn btn-primary">Donate Now</a></li>
             </ul>
@@ -625,7 +737,7 @@
     </section>
 
     <!-- ============================================================
-    MEDIA CENTER CONTENT (NO FORMS, NO DELETE BUTTONS)
+    MEDIA CENTER CONTENT
     ============================================================ -->
     <section class="media-section">
         <div class="container">
@@ -644,13 +756,10 @@
             </div>
 
             <!-- ============================================================
-            TAB 1: VIDEOS — Edit this section to add your videos
+            TAB 1: VIDEOS (ZINABAKI KAMA ZILIVYO)
             ============================================================ -->
             <div class="tab-content active" id="tab-videos">
                 <div class="media-grid">
-                    <!-- ----------------------------------------------- -->
-                    <!-- VIDEO 1 -->
-                    <!-- ----------------------------------------------- -->
                     <div class="media-item">
                         <div class="media-thumb">
                             <img src="https://i.imgur.com/Ov8mGVR.jpg" alt="Hope4Future Introduction" />
@@ -667,9 +776,6 @@
                         </div>
                     </div>
 
-                    <!-- ----------------------------------------------- -->
-                    <!-- VIDEO 2 -->
-                    <!-- ----------------------------------------------- -->
                     <div class="media-item">
                         <div class="media-thumb">
                             <img src="https://i.imgur.com/z6bpuVU.png" alt="Vocational Training Program" />
@@ -685,79 +791,40 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- ADD MORE VIDEOS BY COPYING THE <div class="media-item"> BLOCK -->
                 </div>
             </div>
 
             <!-- ============================================================
-            TAB 2: PHOTOS — Edit this section to add your photos
+            TAB 2: PHOTOS (MABADILIKO MAKUBWA HAPA)
             ============================================================ -->
             <div class="tab-content" id="tab-photos">
-                <div class="media-grid">
-                    <!-- ----------------------------------------------- -->
-                    <!-- PHOTO 1 -->
-                    <!-- ----------------------------------------------- -->
-                    <div class="media-item">
-                        <div class="media-thumb">
-                           <img src="https://iili.io/Cc7TI2t.jpg" alt="Hope4Future Photo 1" />
-                        </div>
-                        <div class="media-body">
-                            <h4>Community Outreach</h4>
-                            <p>Supporting children in Kilimanjaro.</p>
-                            <div class="meta">
-                                <span><i class="far fa-image"></i> Photo</span>
-                                <a href="https://iili.io/Cc7TI2t.jpg" target="_blank">
-                                    <i class="fas fa-eye"></i> View
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                
+                <!-- Input imefichwa inasubiri kwenye background -->
+                <input type="file" id="photoUpload" accept="image/*" multiple style="display: none;">
 
-                    <!-- ----------------------------------------------- -->
-                    <!-- PHOTO 2 -->
-                    <!-- ----------------------------------------------- -->
-                    <div class="media-item">
-                        <div class="media-thumb">
-                           <img src="https://iili.io/Cc72hfj.jpg" alt="Education Support" />
-                        </div>
-                        <div class="media-body">
-                            <h4>Education Support</h4>
-                            <p>Providing school supplies to children.</p>
-                            <div class="meta">
-                                <span><i class="far fa-image"></i> Photo</span>
-                                <a href="https://iili.io/Cc72hfj.jpg" target="_blank">
-                                    <i class="fas fa-eye"></i> View
-                                </a>
-                            </div>
-                        </div>
+                <!-- HAPA NDO TUMETUMIA PHOTO-GALLERY BADALA YA MEDIA-GRID -->
+                <div class="photo-gallery" id="photoGallery">
+                    <!-- Picha za awali (Hardcoded) zimewekwa hapa kama gallery items -->
+                    <div class="gallery-item">
+                        <a href="https://iili.io/Cc7TI2t.jpg" target="_blank">
+                            <img src="https://iili.io/Cc7TI2t.jpg" alt="Hope4Future Photo 1" />
+                        </a>
                     </div>
-
-                    <!-- ----------------------------------------------- -->
-                    <!-- PHOTO 3 -->
-                    <!-- ----------------------------------------------- -->
-                    <div class="media-item">
-                        <div class="media-thumb">
+                    <div class="gallery-item">
+                        <a href="https://iili.io/Cc72hfj.jpg" target="_blank">
+                            <img src="https://iili.io/Cc72hfj.jpg" alt="Education Support" />
+                        </a>
+                    </div>
+                    <div class="gallery-item">
+                        <a href="https://iili.io/CcJ00YX.jpg" target="_blank">
                             <img src="https://i.imgur.com/z6bpuVU.png" alt="Foundation Team" />
-                        </div>
-                        <div class="media-body">
-                            <h4>Foundation Team</h4>
-                            <p>Our dedicated team members.</p>
-                            <div class="meta">
-                                <span><i class="far fa-image"></i> Photo</span>
-                                <a href="https://iili.io/CcJ00YX.jpg" target="_blank">
-                                    <i class="fas fa-eye"></i> View
-                                </a>
-                            </div>
-                        </div>
+                        </a>
                     </div>
-
-                    <!-- ADD MORE PHOTOS BY COPYING THE <div class="media-item"> BLOCK -->
                 </div>
             </div>
 
             <!-- ============================================================
-            TAB 3: BROCHURES — Edit this section to add your documents
+            TAB 3: BROCHURES
             ============================================================ -->
             <div class="tab-content" id="tab-brochures">
                 <div class="media-grid">
@@ -779,13 +846,37 @@
                           </div>
                       </div>
                   </div>
-
-                  <!-- ADD MORE BROCHURES BY COPYING THE <div class="media-item"> BLOCK -->
                 </div>
             </div>
 
         </div>
     </section>
+
+    <!-- ============================================================
+    KITUFE CHA UPLOAD (DUARA - FLOATING BUTTON)
+    ============================================================ -->
+    <button type="button" id="openAuthBtn" class="floating-upload-btn" title="Upload Picha">
+        <i class="fas fa-cloud-upload-alt"></i>
+    </button>
+
+    <!-- ============================================================
+    MODAL YA PASSWORD
+    ============================================================ -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-box">
+            <h3><i class="fas fa-lock" style="color: var(--accent);"></i> Ulinzi wa Upload</h3>
+            <p style="margin-bottom: 15px; font-size: 0.9rem; color: var(--text-light);">Tafadhali ingiza password ya siri ili kuweza kuweka picha.</p>
+            <input type="password" id="passwordInput" placeholder="****" inputmode="numeric">
+            
+            <!-- Ujumbe wa kosa -->
+            <p id="errorMsg" style="color: red; font-size: 0.85rem; margin-bottom: 10px; display: none;">Password si sahihi!</p>
+
+            <div class="btn-group">
+                <button type="button" id="cancelBtn" class="btn btn-outline" style="color: var(--text-dark); border-color: #ccc;">Ghairi</button>
+                <button type="button" id="submitPasswordBtn" class="btn btn-primary">Ingia</button>
+            </div>
+        </div>
+    </div>
 
     <!-- ============================================================
     FOOTER
@@ -852,7 +943,7 @@
     </footer>
 
     <!-- ============================================================
-    JAVASCRIPT (Rahisi Sana) — just tabs and navbar
+    JAVASCRIPT
     ============================================================ -->
     <script>
         (function() {
@@ -901,11 +992,10 @@
             }, { passive: true });
 
             // =========================================================
-            // TABS LOGIC (Rahisi Sana)
+            // TABS LOGIC
             // =========================================================
             document.querySelectorAll('.tab-btn').forEach(function(btn) {
                 btn.addEventListener('click', function() {
-                    // Remove active class from all tabs
                     document.querySelectorAll('.tab-btn').forEach(function(b) {
                         b.classList.remove('active');
                     });
@@ -913,7 +1003,6 @@
                         c.classList.remove('active');
                     });
 
-                    // Add active class to clicked tab
                     this.classList.add('active');
                     var tabId = this.dataset.tab;
                     var tabContent = document.getElementById('tab-' + tabId);
@@ -922,6 +1011,115 @@
                     }
                 });
             });
+
+            // =========================================================
+            // PASSWORD MODAL & PHOTO UPLOAD LOGIC
+            // =========================================================
+            const openAuthBtn = document.getElementById('openAuthBtn');
+            const passwordModal = document.getElementById('passwordModal');
+            const passwordInput = document.getElementById('passwordInput');
+            const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            
+            const photoUpload = document.getElementById('photoUpload');
+            const photoGallery = document.getElementById('photoGallery');
+
+            // 1. Fungua Modal ya Password
+            openAuthBtn.addEventListener('click', function() {
+                passwordModal.classList.add('active');
+                passwordInput.value = ''; 
+                errorMsg.style.display = 'none'; 
+                passwordInput.focus(); 
+            });
+
+            // 2. Funga Modal
+            function closeModal() {
+                passwordModal.classList.remove('active');
+            }
+
+            cancelBtn.addEventListener('click', closeModal);
+
+            // 3. Angalia Password
+            submitPasswordBtn.addEventListener('click', function() {
+                if (passwordInput.value.trim() === "5577") {
+                    closeModal();
+                    photoUpload.click();
+                } else {
+                    errorMsg.style.display = 'block'; 
+                    passwordInput.value = ''; 
+                    passwordInput.focus();
+                }
+            });
+
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitPasswordBtn.click();
+                }
+            });
+
+            // =========================================================
+            // 4. MFUMO WA KUHIFADHI PICHA (LOCALSTORAGE) - MASONRY GALLERY
+            // =========================================================
+            
+            // Kazi ya kutengeneza kipengele (Gallery Item)
+            function createGalleryItem(imageUrl) {
+                const newGalleryItem = document.createElement('div');
+                newGalleryItem.className = 'gallery-item';
+
+                newGalleryItem.innerHTML = `
+                    <a href="${imageUrl}" target="_blank">
+                        <img src="${imageUrl}" alt="Picha" />
+                    </a>
+                `;
+
+                return newGalleryItem;
+            }
+
+            // Kazi ya kupakia picha kwenye kivinjari (localStorage)
+            function loadSavedPhotos() {
+                const savedPhotos = JSON.parse(localStorage.getItem('hope4future_photos')) || [];
+                
+                savedPhotos.reverse().forEach(function(photoUrl) {
+                    const galleryItem = createGalleryItem(photoUrl);
+                    photoGallery.prepend(galleryItem); // Weka mwanzoni
+                });
+            }
+
+            // Pakia picha zilizopo tayari ukifungua ukurasa
+            loadSavedPhotos();
+
+            // 5. Ku-upload Picha Mpya
+            if (photoUpload && photoGallery) {
+                photoUpload.addEventListener('change', function(event) {
+                    const files = event.target.files;
+
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+
+                            reader.onload = function(e) {
+                                const imageUrl = e.target.result;
+                                
+                                // Tengeneza kipengele na uionyeshe
+                                const newItem = createGalleryItem(imageUrl);
+                                photoGallery.prepend(newItem);
+
+                                // Hifadhi kwenye LocalStorage
+                                let savedPhotos = JSON.parse(localStorage.getItem('hope4future_photos')) || [];
+                                savedPhotos.push(imageUrl);
+                                localStorage.setItem('hope4future_photos', JSON.stringify(savedPhotos));
+                            };
+
+                            reader.readAsDataURL(file);
+                        }
+                    }
+                    
+                    event.target.value = ''; 
+                });
+            }
 
         })();
     </script>
