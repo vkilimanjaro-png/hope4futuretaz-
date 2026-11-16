@@ -243,15 +243,7 @@
                 <input type="file" id="photoUpload" accept="image/*" multiple style="display: none;">
                 
                 <div class="photo-gallery" id="photoGallery">
-                    <div class="gallery-item">
-                        <a href="https://iili.io/Cc7TI2t.jpg" target="_blank"><img src="https://iili.io/Cc7TI2t.jpg" alt="Photo 1" /></a>
-                    </div>
-                    <div class="gallery-item">
-                        <a href="https://iili.io/Cc72hfj.jpg" target="_blank"><img src="https://iili.io/Cc72hfj.jpg" alt="Photo 2" /></a>
-                    </div>
-                    <div class="gallery-item">
-                        <a href="https://iili.io/CcJ00YX.jpg" target="_blank"><img src="https://i.imgur.com/z6bpuVU.png" alt="Photo 3" /></a>
-                    </div>
+                    <!-- Picha zitaonekana hapa kiotomatiki kutoka Cloudinary -->
                 </div>
             </div>
 
@@ -337,6 +329,15 @@
         (function() {
             'use strict';
 
+            // =========================================================
+            // MIPANGILIO YA CLOUDINARY
+            // =========================================================
+            const CLOUDINARY_CLOUD_NAME = "lpcsrg40"; 
+            const CLOUDINARY_UPLOAD_PRESET = "hope4future_upload";
+            
+            // Tag hii ni muhimu sana. Inaunganisha picha zote unazopakia.
+            const GALLERY_TAG = "hope4future_gallery";
+
             // Navbar Logic
             const hamburger = document.getElementById('hamburger');
             const navLinks = document.getElementById('navLinks');
@@ -360,7 +361,7 @@
                 });
             });
 
-            // Password & Upload Logic
+            // Password Logic
             const openAuthBtn = document.getElementById('openAuthBtn');
             const passwordModal = document.getElementById('passwordModal');
             const passwordInput = document.getElementById('passwordInput');
@@ -395,29 +396,46 @@
             });
 
             // =========================================================
-            // IMGBB UPLOAD LOGIC (na compression + progress bar)
+            // KAZI ZA CLOUDINARY (KUPATA NA KUPakia PICHA)
             // =========================================================
-            const IMGBB_KEYS = [
-                "20ba1e3b87490a07b533e7a46c52029e",
-                "9418de6955cccce93ac851e29da36248"
-            ];
-
             function createGalleryItem(imageUrl) {
-                const newGalleryItem = document.createElement('div');
-                newGalleryItem.className = 'gallery-item';
-                newGalleryItem.innerHTML = `<a href="${imageUrl}" target="_blank"><img src="${imageUrl}" alt="Picha" /></a>`;
-                return newGalleryItem;
+                const div = document.createElement('div');
+                div.className = 'gallery-item';
+                div.innerHTML = `<a href="${imageUrl}" target="_blank"><img src="${imageUrl}" alt="Picha" loading="lazy" /></a>`;
+                return div;
             }
 
-            function loadSavedPhotos() {
-                const savedPhotos = JSON.parse(localStorage.getItem('hope4future_photos')) || [];
-                savedPhotos.slice().reverse().forEach(photoUrl => photoGallery.prepend(createGalleryItem(photoUrl)));
-            }
-            loadSavedPhotos();
+            // 1. Pata picha zote zilizo na tag kutoka Cloudinary
+            async function loadPhotosFromCloudinary() {
+                photoGallery.innerHTML = '<p style="text-align:center; width:100%; color:#888;">Inapakia picha...</p>';
+                
+                // URL hii inasoma orodha ya picha zenye tag yetu
+                const listUrl = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/list/${GALLERY_TAG}.json`;
 
-            // ---------------------------------------------------------
-            // PUNGUZA UKUBWA WA PICHA KABLA YA KUPAKIA
-            // ---------------------------------------------------------
+                try {
+                    const response = await axios.get(listUrl);
+                    const data = response.data;
+                    
+                    photoGallery.innerHTML = ''; // Futa ujumbe wa "inapakia"
+
+                    if (data.resources && data.resources.length > 0) {
+                        // Onyesha picha (mpya kwanza)
+                        data.resources.reverse().forEach(photo => {
+                            photoGallery.appendChild(createGalleryItem(photo.secure_url));
+                        });
+                    } else {
+                        photoGallery.innerHTML = '<p style="text-align:center; width:100%; color:#888;">Hakuna picha bado. Pakia picha mpya!</p>';
+                    }
+                } catch (err) {
+                    console.error("Hitilafu kupata picha:", err);
+                    photoGallery.innerHTML = '<p style="text-align:center; width:100%; color:red;">Imeshindikana kupata picha. Hakikisha umeondoa kizuizi cha "Resource list" kwenye Cloudinary.</p>';
+                }
+            }
+
+            // Iite mara moja ukurasa ukifunguka
+            loadPhotosFromCloudinary();
+
+            // 2. Punguza ukubwa wa picha
             function compressImage(file, maxWidth = 1200, quality = 0.75) {
                 return new Promise((resolve) => {
                     const reader = new FileReader();
@@ -425,23 +443,16 @@
                         const img = new Image();
                         img.onload = () => {
                             let { width, height } = img;
-
                             if (width > maxWidth) {
                                 height = Math.round((height * maxWidth) / width);
                                 width = maxWidth;
                             }
-
                             const canvas = document.createElement('canvas');
                             canvas.width = width;
                             canvas.height = height;
                             const ctx = canvas.getContext('2d');
                             ctx.drawImage(img, 0, 0, width, height);
-
-                            canvas.toBlob(
-                                (blob) => resolve(blob),
-                                'image/jpeg',
-                                quality
-                            );
+                            canvas.toBlob((blob) => resolve(blob), 'image/jpeg', quality);
                         };
                         img.src = e.target.result;
                     };
@@ -449,31 +460,20 @@
                 });
             }
 
-            // ---------------------------------------------------------
-            // PROGRESS BAR
-            // ---------------------------------------------------------
+            // 3. Progress Bar
             function showProgress(percent) {
                 let bar = document.getElementById('uploadProgressBar');
                 if (!bar) {
                     bar = document.createElement('div');
                     bar.id = 'uploadProgressBar';
-                    bar.style.cssText = `
-                        position: fixed; bottom: 100px; right: 30px;
-                        width: 200px; height: 8px; background: #e5e5e5;
-                        border-radius: 4px; overflow: hidden; z-index: 1000;
-                        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-                    `;
+                    bar.style.cssText = `position: fixed; bottom: 100px; right: 30px; width: 200px; height: 8px; background: #e5e5e5; border-radius: 4px; overflow: hidden; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.2);`;
                     const fill = document.createElement('div');
                     fill.id = 'uploadProgressFill';
-                    fill.style.cssText = `
-                        height: 100%; width: 0%; background: #fca311;
-                        transition: width 0.2s ease;
-                    `;
+                    fill.style.cssText = `height: 100%; width: 0%; background: #fca311; transition: width 0.2s ease;`;
                     bar.appendChild(fill);
                     document.body.appendChild(bar);
                 }
                 document.getElementById('uploadProgressFill').style.width = percent + '%';
-
                 if (percent >= 100) {
                     setTimeout(() => {
                         const b = document.getElementById('uploadProgressBar');
@@ -482,52 +482,38 @@
                 }
             }
 
-            // ---------------------------------------------------------
-            // PAKIA PICHA KWENDA IMGBB
-            // ---------------------------------------------------------
-            async function uploadToImgBB(file) {
-                // 1. Punguza ukubwa kwanza
+            // 4. Pakia picha kwenda Cloudinary na uweke Tag
+            async function uploadToCloudinary(file) {
                 const compressedBlob = await compressImage(file);
 
-                // 2. Jaribu kila key
-                for (let k = 0; k < IMGBB_KEYS.length; k++) {
-                    const formData = new FormData();
-                    formData.append('image', compressedBlob, file.name || 'photo.jpg');
-                    formData.append('key', IMGBB_KEYS[k]);
+                const formData = new FormData();
+                formData.append('file', compressedBlob, file.name || 'photo.jpg');
+                formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                
+                // HAPA NDIPO TUNAWEKA TAG
+                formData.append('tags', GALLERY_TAG); 
 
-                    try {
-                        const response = await axios.post(
-                            'https://api.imgbb.com/1/upload',
-                            formData,
-                            {
-                                onUploadProgress: (progressEvent) => {
-                                    if (progressEvent.total) {
-                                        const percent = Math.round(
-                                            (progressEvent.loaded * 100) / progressEvent.total
-                                        );
-                                        showProgress(percent);
-                                    }
+                try {
+                    const response = await axios.post(
+                        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+                        formData,
+                        {
+                            onUploadProgress: (progressEvent) => {
+                                if (progressEvent.total) {
+                                    const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                                    showProgress(percent);
                                 }
                             }
-                        );
-
-                        const data = response.data;
-
-                        if (data.success && data.data) {
-                            return data.data.display_url || data.data.url;
-                        } else {
-                            console.warn(`Ufunguo wa ${k + 1} umeshindikana:`, data);
                         }
-                    } catch (err) {
-                        console.warn(`Hitilafu ya ombi la ufunguo wa ${k + 1}:`, err.response?.data || err.message);
-                    }
+                    );
+                    return response.data.secure_url;
+                } catch (err) {
+                    console.warn("Hitilafu ya ombi la Cloudinary:", err.response?.data || err.message);
+                    return null;
                 }
-                return null;
             }
 
-            // ---------------------------------------------------------
-            // EVENT LISTENER YA UPLOAD
-            // ---------------------------------------------------------
+            // 5. Tukio la Kupakia
             if (photoUpload && photoGallery) {
                 photoUpload.addEventListener('change', async function(event) {
                     const files = event.target.files;
@@ -536,20 +522,14 @@
                         const file = files[i];
                         if (!file.type.startsWith('image/')) continue;
 
-                        console.log(`Picha ya awali: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
-
-                        const imageUrl = await uploadToImgBB(file);
+                        const imageUrl = await uploadToCloudinary(file);
 
                         if (imageUrl) {
+                            // Ongeza picha mpya mwanzoni wa gallery
+                            if (photoGallery.querySelector('p')) photoGallery.innerHTML = '';
                             photoGallery.prepend(createGalleryItem(imageUrl));
-
-                            let savedPhotos = JSON.parse(localStorage.getItem('hope4future_photos')) || [];
-                            savedPhotos.push(imageUrl);
-                            localStorage.setItem('hope4future_photos', JSON.stringify(savedPhotos));
-
-                            console.log("Picha imepakiwa:", imageUrl);
                         } else {
-                            alert("Imeshindikana kupakia picha. Angalia Console (F12) kwa maelezo zaidi.");
+                            alert("Imeshindikana kupakia picha. Angalia Console (F12).");
                         }
                     }
                     event.target.value = '';
