@@ -409,26 +409,27 @@
             async function loadPhotosFromCloudinary() {
                 photoGallery.innerHTML = '<p style="text-align:center; width:100%; color:#888;">Inapakia picha...</p>';
                 
-                // URL hii inasoma orodha ya picha zenye tag yetu
                 const listUrl = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/list/${GALLERY_TAG}.json`;
 
                 try {
                     const response = await axios.get(listUrl);
                     const data = response.data;
                     
-                    photoGallery.innerHTML = ''; // Futa ujumbe wa "inapakia"
+                    photoGallery.innerHTML = ''; 
 
                     if (data.resources && data.resources.length > 0) {
-                        // Onyesha picha (mpya kwanza)
                         data.resources.reverse().forEach(photo => {
-                            photoGallery.appendChild(createGalleryItem(photo.secure_url));
+                            // Hapa tunajenga URL sahihi moja kwa moja bila kuongeza .format
+                            // Hii inarekebisha aikoni zilizovunjika
+                            const imageUrl = `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${photo.public_id}`;
+                            photoGallery.appendChild(createGalleryItem(imageUrl));
                         });
                     } else {
                         photoGallery.innerHTML = '<p style="text-align:center; width:100%; color:#888;">Hakuna picha bado. Pakia picha mpya!</p>';
                     }
                 } catch (err) {
                     console.error("Hitilafu kupata picha:", err);
-                    photoGallery.innerHTML = '<p style="text-align:center; width:100%; color:red;">Imeshindikana kupata picha. Hakikisha umeondoa kizuizi cha "Resource list" kwenye Cloudinary.</p>';
+                    photoGallery.innerHTML = '<p style="text-align:center; width:100%; color:red;">Imeshindikana kupata picha. Angalia Console (F12).</p>';
                 }
             }
 
