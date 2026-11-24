@@ -603,6 +603,66 @@
             transform: scale(1.02);
         }
 
+        /* ===== MPYA: DONATION CONTENT BLOCK ===== */
+        .donation-block {
+            background: #f8fafc;
+            padding: 1.5rem 2rem;
+            border-radius: var(--radius);
+            border: 1px solid #e2e8f0;
+            margin-top: 0.5rem;
+        }
+        .donation-block h3 {
+            color: var(--oxford-blue);
+            font-size: 1.15rem;
+            margin-bottom: 0.2rem;
+            font-weight: 700;
+        }
+        .donation-block h3 i {
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+        .donation-block h4 {
+            color: var(--oxford-blue);
+            font-size: 1rem;
+            margin-top: 1.2rem;
+            margin-bottom: 0.2rem;
+            font-weight: 600;
+        }
+        .donation-block p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+        .donation-block ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 0.5rem;
+        }
+        .donation-block ul li {
+            font-size: 0.95rem;
+            padding: 0.2rem 0 0.2rem 1.6rem;
+            position: relative;
+            color: var(--text-light);
+        }
+        .donation-block ul li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .donation-block .closing-note {
+            margin-top: 1rem;
+            font-weight: 600;
+            color: var(--oxford-blue);
+            text-align: center;
+            border-top: 2px dashed #e2e8f0;
+            padding-top: 0.8rem;
+        }
+        .donation-block .closing-note span {
+            color: var(--accent);
+        }
+
         .footer {
             background: var(--black);
             color: rgba(255, 255, 255, 0.7);
@@ -767,6 +827,10 @@
             .file-name-display {
                 text-align: center;
             }
+
+            .donation-block {
+                padding: 1.2rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -875,10 +939,6 @@
                     </ul>
                 </div>
                 
-                <!-- ==========================================
-                     HAPA NDIPO PALIPOFANYIWA MABADILIKO
-                     (Orodha ya lugha imeondolewa, jina limebadilishwa)
-                     ========================================== -->
                 <div class="position-card">
                     <div class="icon"><i class="fas fa-chalkboard-teacher"></i></div>
                     <span class="letter">B</span>
@@ -968,7 +1028,7 @@
                         </div>
 
                         <!-- ==========================================================
-                        PASSPORT SIZE PHOTO – SASA HAKUNA "No file chosen"
+                        PASSPORT SIZE PHOTO
                         ========================================================== -->
                         <div class="form-group full-width">
                             <label for="passport">Passport Size Photo <span class="required">*</span></label>
@@ -1027,10 +1087,49 @@
                             <div class="hint"></div>
                         </div>
 
-                        <!-- Additional Message -->
+                        <!-- ==========================================================
+                        DONATION CONTENT (replaced Additional Message)
+                        ========================================================== -->
                         <div class="form-group full-width">
-                            <label for="message">Additional Message (optional)</label>
-                            <textarea id="message" name="message" placeholder="Write anything you'd like to add..."></textarea>
+                            <label>Donate Today, Invest in Education!</label>
+                            <div class="donation-block">
+                                <h3><i class="fas fa-hand-holding-heart"></i> DONATE,INVEST IN EDUCATION!</h3>
+                                <p>We welcome donations of various supplies and equipment to help children and young people access quality education, develop skills, and enjoy a better learning environment.</p>
+
+                                <h4>1. School Supplies</h4>
+                                <ul>
+                                    <li>Exercise books and notebooks</li>
+                                    <li>Pencils and pens</li>
+                                    <li>School shoes</li>
+                                    <li>School uniforms and clothing</li>
+                                    <li>School bags</li>
+                                </ul>
+
+                                <h4>2. Information and Communication Technology (ICT) Equipment</h4>
+                                <ul>
+                                    <li>Computers (Desktop and Laptop)</li>
+                                    <li>Flash Drives (USB)</li>
+                                    <li>Hard Drives</li>
+                                    <li>Projectors</li>
+                                    <li>Printers</li>
+                                    <li>Cameras</li>
+                                    <li>Other computer equipment for IT training and computer classes.</li>
+                                </ul>
+
+                                <h4>3. Needs of Children and Young People</h4>
+                                <ul>
+                                    <li>Sanitary pads</li>
+                                    <li>Clothing for children and young people</li>
+                                    <li>Shoes</li>
+                                    <li>Other essential items for children and young people.</li>
+                                </ul>
+
+                                <div class="closing-note">
+                                    <span>YOUR CONTRIBUTION MAKES A DIFFERENCE!</span><br>
+                                    You can donate new or gently used items that are still in good condition.<br>
+                                    Together, we can transform the lives of children and young people through education!
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Submit Button -->
@@ -1119,7 +1218,7 @@
             'use strict';
 
             // ==========================================================
-            // 🔑 API KEY (imeshapachikwa)
+            // 🔑 API KEY
             // ==========================================================
             const IMGBB_API_KEY = '20ba1e3b87490a07b533e7a46c52029e';
 
@@ -1156,7 +1255,7 @@
             });
 
             // ==========================================================
-            // FILE UPLOAD CUSTOM – ONDOA "No file chosen"
+            // FILE UPLOAD CUSTOM
             // ==========================================================
             const fileInput = document.getElementById('passport');
             const fileUploadBtn = document.getElementById('fileUploadBtn');
@@ -1174,12 +1273,11 @@
                     fileNameDisplay.textContent = 'Hakuna picha';
                     fileNameDisplay.classList.remove('has-file');
                 }
-                // Trigger validation styling (kama ilivyokuwa awali)
                 this.style.borderColor = this.files.length > 0 ? '#86efac' : '#e2e8f0';
             });
 
             // =========================================================
-            // FUNCTION: PAKIA PICHA IMBGG
+            // FUNCTION: PAKIA PICHA IMGBB
             // =========================================================
             function uploadToImgBB(file) {
                 return new Promise(function(resolve, reject) {
@@ -1199,8 +1297,7 @@
                                 if (data.success) {
                                     resolve(data.data.display_url || data.data.url);
                                 } else {
-                                    reject(new Error(data.error ? data
-                                    .error.message : 'ImgBB upload failed'));
+                                    reject(new Error(data.error ? data.error.message : 'ImgBB upload failed'));
                                 }
                             })
                             .catch(function(err) { reject(err); });
@@ -1256,7 +1353,6 @@
                 const passportInput = document.getElementById('passport');
                 if (passportInput.files.length === 0) {
                     passportInput.style.borderColor = '#b91c1c';
-                    // Pia tunaweza kuonyesha kwenye kitufe au display
                     fileNameDisplay.style.borderColor = '#b91c1c';
                     fileNameDisplay.style.background = '#fee2e2';
                     isValid = false;
@@ -1283,7 +1379,7 @@
                     isValid = false;
                 }
 
-                // Phone format (min 6 digits)
+                // Phone format
                 const phoneInput = document.getElementById('phone');
                 const phoneClean = phoneInput.value.replace(/\s/g, '');
                 if (phoneClean && phoneClean.length < 6) {
@@ -1342,7 +1438,7 @@
         🎯 *Preferred Area:* ${data.position}
         📝 *Experience/Skills:* ${data.experience}
         📅 *Availability:* ${data.availability || 'Not specified'}
-        💬 *Additional Message:* ${data.message || 'None'}
+        💬 *Message:* Donation content embedded in form (no custom message provided)
 
         --- Sent via website volunteer form ---`;
 
@@ -1365,11 +1461,10 @@
                     });
             });
 
-            // Real-time validation (including file)
+            // Real-time validation
             requiredInputs.forEach(function(input) {
                 if (input.type === 'radio') return;
                 if (input.type === 'file') {
-                    // Hili tayari tumeshughulikia kupitia tukio la 'change' hapo juu
                     return;
                 }
                 input.addEventListener('input', function() {
